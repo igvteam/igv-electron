@@ -1,6 +1,7 @@
 'use strict';
 const path = require('path');
-const {app, Menu, shell} = require('electron');
+const fs = require('fs');
+const {app, Menu, shell, dialog} = require('electron');
 const {
 	is,
 	appMenu,
@@ -10,6 +11,7 @@ const {
 	debugInfo
 } = require('electron-util');
 const config = require('./config.js');
+const {createTrackConfigs} = require('./src/main/trackUtils.js');
 
 const showPreferences = () => {
 	// Show the app's preferences here
@@ -18,11 +20,11 @@ const showPreferences = () => {
 const helpSubmenu = [
 	openUrlMenuItem({
 		label: 'Website',
-		url: 'https://github.com/sindresorhus/electron-boilerplate'
+		url: 'https://igv.org'
 	}),
 	openUrlMenuItem({
 		label: 'Source Code',
-		url: 'https://github.com/sindresorhus/electron-boilerplate'
+		url: 'https://github.com/igvteam/igv.js'
 	}),
 	{
 		label: 'Report an Issue…',
@@ -104,7 +106,8 @@ const macosTemplate = [
 		role: 'fileMenu',
 		submenu: [
 			{
-				label: 'Custom'
+				label: 'Load from file...',
+				click: getFileFromUser
 			},
 			{
 				type: 'separator'
@@ -167,6 +170,24 @@ const otherTemplate = [
 	}
 ];
 
+/**
+ * Open a file dialog to select files.
+ *
+ * @returns {Promise<void>}
+ */
+async function getFileFromUser () {
+
+	const files = await dialog.showOpenDialog(mainWindow, {
+		properties: ['openFile', 'multiSelections']
+	});
+
+	if (!files) { return; }
+
+	const configs = createTrackConfigs(files.filePaths);
+	mainWindow.webContents.send('fromMain', JSON.stringify(configs))
+
+}
+
 const template = is.macos ? macosTemplate : otherTemplate;
 
 if (is.development) {
@@ -176,4 +197,11 @@ if (is.development) {
 	});
 }
 
-module.exports = Menu.buildFromTemplate(template);
+let mainWindow;
+
+function createMenu(win) {
+	mainWindow = win;
+	return Menu.buildFromTemplate(template);
+}
+
+module.exports = createMenu

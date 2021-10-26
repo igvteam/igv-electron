@@ -7,7 +7,7 @@ const unhandled = require('electron-unhandled');
 const debug = require('electron-debug');
 const contextMenu = require('electron-context-menu');
 const config = require('./config.js');
-const menu = require('./menu.js');
+const createMenu = require('./menu.js');
 
 unhandled();
 debug();
@@ -32,10 +32,13 @@ let mainWindow;
 
 const createMainWindow = async () => {
 	const win = new BrowserWindow({
-		title: app.name,
+		title: "IGV",
 		show: false,
-		width: 600,
-		height: 400
+		width: 1200,
+		height: 800,
+		webPreferences: {
+			preload: path.join(__dirname, "preload.js")
+		}
 	});
 
 	win.on('ready-to-show', () => {
@@ -82,9 +85,9 @@ app.on('activate', async () => {
 
 (async () => {
 	await app.whenReady();
-	Menu.setApplicationMenu(menu);
 	mainWindow = await createMainWindow();
+	Menu.setApplicationMenu(createMenu(mainWindow));
 
-	const favoriteAnimal = config.get('favoriteAnimal');
-	mainWindow.webContents.executeJavaScript(`document.querySelector('header p').textContent = 'Your favorite animal is ${favoriteAnimal}'`);
+	// const favoriteAnimal = config.get('favoriteAnimal');
+	// mainWindow.webContents.executeJavaScript(`document.querySelector('header p').textContent = 'Your favorite animal is ${favoriteAnimal}'`);
 })();
