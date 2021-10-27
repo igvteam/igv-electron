@@ -13,6 +13,12 @@ const {
 const config = require('./config.js');
 const {createTrackConfigs} = require('./src/main/trackUtils.js');
 
+let mainWindow;
+function createMenu(win) {
+	mainWindow = win;
+	return Menu.buildFromTemplate(template);
+}
+
 const showPreferences = () => {
 	// Show the app's preferences here
 };
@@ -52,7 +58,7 @@ if (!is.macos) {
 			type: 'separator'
 		},
 		aboutMenuItem({
-			icon: path.join(__dirname, 'static', 'icon.png'),
+			icon: path.join(__dirname, 'static', 'IGV_64.ico'),
 			text: 'Created by Your Name'
 		})
 	);
@@ -195,13 +201,6 @@ if (is.development) {
 		label: 'Debug',
 		submenu: debugSubmenu
 	});
-}
-
-let mainWindow;
-
-function createMenu(win) {
-	mainWindow = win;
-	return Menu.buildFromTemplate(template);
 }
 
 module.exports = createMenu

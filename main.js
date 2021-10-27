@@ -6,7 +6,6 @@ const {is} = require('electron-util');
 const unhandled = require('electron-unhandled');
 const debug = require('electron-debug');
 const contextMenu = require('electron-context-menu');
-const config = require('./config.js');
 const createMenu = require('./menu.js');
 
 unhandled();
@@ -61,15 +60,15 @@ if (!app.requestSingleInstanceLock()) {
 	app.quit();
 }
 
-app.on('second-instance', () => {
-	if (mainWindow) {
-		if (mainWindow.isMinimized()) {
-			mainWindow.restore();
-		}
+// app.on('second-instance', () => {
+// 	if (mainWindow) {
+// 		if (mainWindow.isMinimized()) {
+// 			mainWindow.restore();
+// 		}
+// 		mainWindow.show();
+// 	}
+// });
 
-		mainWindow.show();
-	}
-});
 
 app.on('window-all-closed', () => {
 	if (!is.macos) {
@@ -78,8 +77,9 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', async () => {
-	if (!mainWindow) {
+	if (BrowserWindow.getAllWindows().length === 0) {
 		mainWindow = await createMainWindow();
+		Menu.setApplicationMenu(createMenu(mainWindow));
 	}
 });
 
@@ -87,7 +87,4 @@ app.on('activate', async () => {
 	await app.whenReady();
 	mainWindow = await createMainWindow();
 	Menu.setApplicationMenu(createMenu(mainWindow));
-
-	// const favoriteAnimal = config.get('favoriteAnimal');
-	// mainWindow.webContents.executeJavaScript(`document.querySelector('header p').textContent = 'Your favorite animal is ${favoriteAnimal}'`);
 })();

@@ -1,14 +1,13 @@
 {
-	"name": "app-name",
+	"name": "igv-electron",
 	"productName": "IGV",
+    "main": "main.js",
 	"version": "0.0.1",
 	"description": "The best app ever",
 	"license": "MIT",
-	"repository": "sindresorhus/electron-boilerplate",
+	"repository": "igvteam/igv-electron",
 	"author": {
-		"name": "Your Name",
-		"email": "user@gmail.com",
-		"url": "https://sindresorhus.com"
+		"name": "Jim Robinson"
 	},
 	"scripts": {
 		"postinstall": "electron-builder install-app-deps",
@@ -16,8 +15,7 @@
 		"test": "npm run lint",
 		"start": "electron .",
 		"pack": "electron-builder --dir",
-		"dist": "electron-builder --macos --linux --windows",
-		"release": "np"
+		"dist": "electron-builder --macos --linux --windows"
 	},
 	"dependencies": {
 		"electron-context-menu": "^3.0.0",
@@ -30,21 +28,10 @@
 	"devDependencies": {
 		"electron": "^12.0.6",
 		"electron-builder": "^22.10.5",
-		"np": "^7.5.0",
 		"xo": "^0.39.1"
 	},
-	"xo": {
-		"envs": [
-			"node",
-			"browser"
-		]
-	},
-	"np": {
-		"publish": false,
-		"releaseDraft": false
-	},
 	"build": {
-		"appId": "com.company.AppName",
+		"appId": "igv.org.igv-electron",
 		"mac": {
 			"category": "public.app-category.social-networking",
 			"darkModeSupport": true
