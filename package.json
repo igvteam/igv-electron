@@ -11,8 +11,6 @@
 	},
 	"scripts": {
 		"postinstall": "electron-builder install-app-deps",
-		"lint": "xo",
-		"test": "npm run lint",
 		"start": "electron .",
 		"pack": "electron-builder --dir",
 		"dist": "electron-builder --macos --linux --windows"
@@ -27,13 +25,11 @@
 	},
 	"devDependencies": {
 		"electron": "^12.0.6",
-		"electron-builder": "^22.10.5",
-		"xo": "^0.39.1"
+		"electron-builder": "^22.10.5"
 	},
 	"build": {
 		"appId": "igv.org.igv-electron",
 		"mac": {
-			"category": "public.app-category.social-networking",
 			"darkModeSupport": true
 		},
 		"dmg": {
@@ -55,8 +51,7 @@
 			"target": [
 				"AppImage",
 				"deb"
-			],
-			"category": "Network;Chat"
+			]
 		}
 	}
 }
